@@ -3,12 +3,14 @@ package com.selly.order_service.service;
 import com.selly.order_service.dto.InventoryResponse;
 import com.selly.order_service.dto.OrderLineItemsDto;
 import com.selly.order_service.dto.OrderRequest;
+import com.selly.order_service.event.OrderPlacedEvent;
 import com.selly.order_service.model.Order;
 import com.selly.order_service.model.OrderLineItems;
 import com.selly.order_service.repository.OrderRepository;
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
     private final Tracer tracer;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
@@ -61,6 +64,7 @@ public class OrderService {
 
             if(allProductsInStock){
                 orderRepository.save(order);
+                kafkaTemplate.send("notificationTopic", new OrderPlacedEvent(order.getOrderNumber()));
                 return "Order Placed Successfully";
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");
