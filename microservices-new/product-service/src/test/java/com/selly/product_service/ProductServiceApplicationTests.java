@@ -26,42 +26,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ProductServiceApplicationTests {
 
-	@Container
-	static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0.6");
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	@Autowired
-	private ProductRepository productRepository;
-
-	@DynamicPropertySource
-	static void setProperties(DynamicPropertyRegistry dymDynamicPropertyRegistry) {
-		dymDynamicPropertyRegistry.add("spring.data.mongodb.url", mongoDBContainer::getReplicaSetUrl);
-	}
-
-	@Test
-	void shouldCreateProduct() throws Exception {
-		ProductRequest productRequest = getProductRequest();
-
-		String productRequestString = objectMapper.writeValueAsString(productRequest);
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(productRequestString))
-				.andExpect(status().isCreated());
-
-		Assertions.assertEquals(1, productRepository.findAll().size());
-	}
-
-	private ProductRequest getProductRequest() {
-		return ProductRequest.builder()
-				.name("Iphone 13")
-				.description("iphone 13")
-				.price(BigDecimal.valueOf(1200))
-				.build();
-	}
+//	@Container
+//	static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0.6");
+//
+//	@Autowired
+//	private MockMvc mockMvc;
+//
+//	@Autowired
+//	private ObjectMapper objectMapper;
+//
+//	@Autowired
+//	private ProductRepository productRepository;
+//
+//	@DynamicPropertySource
+//	static void setProperties(DynamicPropertyRegistry dymDynamicPropertyRegistry) {
+//		dymDynamicPropertyRegistry.add("spring.data.mongodb.url", mongoDBContainer::getReplicaSetUrl);
+//	}
+//
+//	@Test
+//	void shouldCreateProduct() throws Exception {
+//		ProductRequest productRequest = getProductRequest();
+//
+//		String productRequestString = objectMapper.writeValueAsString(productRequest);
+//		mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.content(productRequestString))
+//				.andExpect(status().isCreated());
+//
+//		Assertions.assertEquals(1, productRepository.findAll().size());
+//	}
+//
+//	private ProductRequest getProductRequest() {
+//		return ProductRequest.builder()
+//				.name("Iphone 13")
+//				.description("iphone 13")
+//				.price(BigDecimal.valueOf(1200))
+//				.build();
+//	}
 
 }

@@ -69,6 +69,26 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.0</version>
             </plugin>
+            <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.3</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:22-jre</image>
+                    </from>
+                    <to>
+                        <image>selenay/${project.artifactId}</image>
+                    </to>
+                    <container>
+                        <environment>
+                            <SPRING_PROFILES_ACTIVE>docker</SPRING_PROFILES_ACTIVE>
+                        </environment>
+                    </container>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
